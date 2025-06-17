@@ -2,6 +2,35 @@ name: OWASP ZAP Baseline Scan New
 
 on:
   workflow_dispatch:
+name: OWASP ZAP Baseline Scan New
+
+on:
+  workflow_dispatch:
+
+jobs:
+  zap_scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Prepare report files
+        run: |
+          touch report_html.html report_md.md report_json.json
+          chmod a+w report_html.html report_md.md report_json.json
+
+      - name: ZAP Baseline Scan
+        uses: zaproxy/action-baseline@v0.11.0
+        with:
+          target: 'https://katakuriop123.github.io/belajar-github-actions/'
+          cmd_options: '-J report_json.json -w report_md.md -r report_html.html'
+
+      - name: Upload ZAP Report Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: zap-report-artifact
+          path: |
+            report_html.html
+            report_md.md
+            report_json.json
 
 jobs:
   zap_scan:
