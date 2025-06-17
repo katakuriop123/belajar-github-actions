@@ -7,7 +7,7 @@ jobs:
   zap_scan:
     runs-on: ubuntu-latest
     steps:
-      - name: katakuriop123
-        uses: katakuriop123/belajar-github-actions
+      - name: ZAP Baseline Scan
+        uses: zaproxy/action-baseline@v0.9.0
         with:
-          target: 'https://<username>.github.io/<repository>'
+          target: 'https://katakuriop123.github.io/belajar-github-actions'
