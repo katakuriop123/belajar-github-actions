@@ -2,10 +2,6 @@ name: OWASP ZAP Baseline Scan New
 
 on:
   workflow_dispatch:
-name: OWASP ZAP Baseline Scan New
-
-on:
-  workflow_dispatch:
 
 jobs:
   zap_scan:
@@ -31,13 +27,3 @@ jobs:
             report_html.html
             report_md.md
             report_json.json
-
-jobs:
-  zap_scan:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: ZAP Baseline Scan
-        uses: zaproxy/action-baseline@v0.11.0
-        with:
-          target: 'https://katakuriop123.github.io/belajar-github-actions/'
