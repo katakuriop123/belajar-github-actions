@@ -1,0 +1,13 @@
+name: OWASP ZAP Baseline Scan
+
+on:
+  workflow_dispatch:
+
+jobs:
+  zap_scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: katakuriop123
+        uses: katakuriop123/belajar-github-actions
+        with:
+          target: 'https://<username>.github.io/<repository>'
