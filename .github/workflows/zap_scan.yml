@@ -13,20 +13,19 @@ jobs:
           touch report_html.html report_md.md report_json.json
           chmod a+w report_html.html report_md.md report_json.json
 
-      - name: ZAP Baseline Scan
+      - name: Run ZAP Baseline Scan
         uses: zaproxy/action-baseline@v0.11.0
         with:
           target: 'https://katakuriop123.github.io/belajar-github-actions/'
           cmd_options: '-J report_json.json -w report_md.md -r report_html.html'
-          issue_title: 'ZAP Scan Baseline Report'
-          issue_label: 'zap-scan'
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ''        # Menonaktifkan auto upload
+          GITHUB_ACTIONS: 'false' # Menonaktifkan auto create issue
 
-      - name: Upload ZAP Report Artifacts
+      - name: Upload ZAP Scan Report Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: zap-report-artifact
+          name: zap-report-${{ github.run_id }}
           path: |
             report_html.html
             report_md.md
