@@ -1,0 +1,65 @@
+name: Full Security Scan (SAST + SCA + DAST)
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  sast_semgrep:
+    name: SAST - Semgrep
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Semgrep
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: auto
+
+  sca_snyk:
+    name: SCA - Snyk
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies (if Node.js)
+        run: npm install
+
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/node@v1
+        with:
+          command: test
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+  dast_zap:
+    name: DAST - ZAP Baseline
+    runs-on: ubuntu-latest
+    steps:
+      - name: Prepare report files
+        run: |
+          touch report_html.html report_md.md report_json.json
+          chmod a+w report_html.html report_md.md report_json.json
+
+      - name: ZAP Baseline Scan
+        uses: zaproxy/action-baseline@v0.11.0
+        with:
+          target: 'https://katakuriop123.github.io/belajar-github-actions/'
+          cmd_options: '-J report_json.json -w report_md.md -r report_html.html'
+        env:
+          GITHUB_TOKEN: ''
+          GITHUB_ACTIONS: 'false'
+
+      - name: Upload ZAP Report Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: zap-report
+          path: |
+            report_html.html
+            report_md.md
+            report_json.json
