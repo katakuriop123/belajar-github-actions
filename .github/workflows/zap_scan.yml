@@ -18,6 +18,9 @@ jobs:
         with:
           target: 'https://katakuriop123.github.io/belajar-github-actions/'
           cmd_options: '-J report_json.json -w report_md.md -r report_html.html'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_ACTIONS: false  # ⛔ nonaktifkan uploader internal
 
       - name: Upload ZAP Report Artifacts
         uses: actions/upload-artifact@v4
